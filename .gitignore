@@ -1,3 +1,16 @@
+# Specific files #
+##################
+/purbeurre_project/purbeurre_project/settings.py
+
+# Visual Studio Code # 
+.vscode/* 
+.vscode/settings.json 
+.vscode/tasks.json 
+.vscode/launch.json 
+.vscode/extensions.json 
+.history
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
