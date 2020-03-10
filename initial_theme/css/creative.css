@@ -84,17 +84,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.5rem;
 }
 
-img.logo{
-  width: 2.5rem;
-}
-
-@media (min-width: 992px)
-header.masthead {
-    height: 20vh;
-    min-height: 30rem;
-    padding: 72px 0;
-}
-
 p {
   margin-top: 0;
   margin-bottom: 1rem;
@@ -9682,7 +9671,10 @@ header.masthead h1 {
 
 @media (min-width: 992px) {
   header.masthead {
-    padding-top: 172px;
+    height: 100vh;
+    min-height: 40rem;
+    padding-top: 72px;
+    padding-bottom: 0;
   }
   header.masthead p {
     font-size: 1.15rem;
