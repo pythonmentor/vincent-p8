@@ -90,7 +90,7 @@
   <section class="page-section" id="content">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-lg-10 text-center">
+        <div class="col-lg-8 text-center">
           <h2>
             {% block content-title %} {% endblock %}
           </h2>
@@ -103,11 +103,13 @@
     </div>
   </section>
 
+  {% block extend-content %}{% endblock %}
+
   <!-- Footer -->
   <footer class="bg-light py-5">
     <div class="container d-flex justify-content-around">
-      <div class="small text-center text-muted"><a href="/mentions-legales">Mentions L&eacute;gales</a></div>
-      <div class="small text-center text-muted"><a href="/contact">Contact</a></div>
+      <div class="text-center text-muted"><a href="/mentions-legales">Mentions L&eacute;gales</a></div>
+      <div class="text-center text-muted"><a href="{% url 'index' %}#contact">Contact</a></div>
     </div>
   </footer>
 
