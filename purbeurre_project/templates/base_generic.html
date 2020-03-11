@@ -9,22 +9,27 @@
   <meta name="description" content="">
   <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/png">
   <meta name="author" content="">
-
   <title>{% block title %}Accueil{% endblock %} - Purbeurre</title>
-
   {# COMMENT ANY CODE IN TEMPLATES #}
   <!-- Font Awesome Icons -->
   <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-
   <!-- Google Fonts -->
   <link href="http://fonts.googleapis.com/css?family=Scope+One" rel="stylesheet" type="text/css">
-
   <!-- Plugin CSS -->
   <link href="{% static 'vendor/magnific-popup/magnific-popup.css' %}" rel="stylesheet">
-
   <!-- Theme CSS - Includes Bootstrap -->
   <link href="{% static 'css/creative.css' %}" rel="stylesheet">
-
+  <style>
+    header.masthead {
+      padding-top: 10rem;
+      padding-bottom: calc(10rem - 72px);
+      background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url('{% if headerImg %}{% static 'pages/' %}{{ headerImg }}{% else %}{% static 'pages/header_index.jpg' %}{% endif %}');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: scroll;
+      background-size: cover;
+    }
+  </style>
 </head>
 
 <body id="page-top">
@@ -40,18 +45,29 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto my-2 my-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="#about">
+            <form class="form text-center">
+              <div class="form-group-sm">
+                <input class="form-control form-control-sm mt-1 mr-3" type="text" id="product-search" placeholder="Chercher" style="width: 100px;">
+
+              </div>
+          </form>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'index' %}accounts/login/">
               <img src="{% static 'img/icon_account.png' %}" alt="Compte" title="Mon compte">
+              <span>Mon compte</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#services">
               <img src="{% static 'img/icon_food.png' %}" alt="Mes aliments" title="Mes aliments">
+              <span>Mes aliments</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#contact">
               <img src="{% static 'img/icon_logout.png' %}" alt="Déconnexion" title="Déconnexion">
+              <span>Déconnexion</span>
             </a>
           </li>
         </ul>
@@ -59,14 +75,28 @@
     </div>
   </nav>
 
-  {% block header %} {% endblock %}
+  <header class="masthead">
+    <div class="container h-100">
+      <div class="row h-100 align-items-center justify-content-center text-center">
+        <div class="col-lg-10 align-self-middle">
+          {% block header %} {% endblock %}
+          <hr class="divider my-4">
+        </div>
+      </div>
+    </div>
+  </header>
 
   <!-- Content Section -->
   <section class="page-section" id="content">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-10 text-center">
+          <h2>
+            {% block content-title %} {% endblock %}
+          </h2>
+          <div class="text-left">
           {% block content %} {% endblock %}
+          </div>
 
         </div>
       </div>
@@ -84,11 +114,9 @@
   <!-- Bootstrap core JavaScript -->
   <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
   <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
   <!-- Plugin JavaScript -->
   <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
   <script src="{% static 'vendor/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
-
   <!-- Custom scripts for this template -->
   <script src="{% static 'js/creative.min.js' %}"></script>
 

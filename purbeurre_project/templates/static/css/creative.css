@@ -9585,7 +9585,7 @@ hr.light {
 }
 
 .page-section {
-  padding: 8rem 0;
+  padding: 2rem 0;
 }
 
 #mainNav {
@@ -9635,6 +9635,43 @@ hr.light {
   #mainNav .navbar-brand:hover {
     color: #fff;
   }
+  #mainNav .navbar-nav .nav-item input {
+    background-color: #d3d3d36b;
+    border: solid 2px black;
+  }
+  #mainNav .navbar-nav .nav-item ::-webkit-input-placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #313131;
+    opacity: 1;
+    /* Firefox */
+  }
+  #mainNav .navbar-nav .nav-item ::-moz-placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #313131;
+    opacity: 1;
+    /* Firefox */
+  }
+  #mainNav .navbar-nav .nav-item :-ms-input-placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #313131;
+    opacity: 1;
+    /* Firefox */
+  }
+  #mainNav .navbar-nav .nav-item ::-ms-input-placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #313131;
+    opacity: 1;
+    /* Firefox */
+  }
+  #mainNav .navbar-nav .nav-item ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #313131;
+    opacity: 1;
+    /* Firefox */
+  }
+  #mainNav .navbar-nav .nav-item span {
+    display: none;
+  }
   #mainNav .navbar-nav .nav-item .nav-link {
     color: rgba(255, 255, 255, 0.7);
     padding: 0 1rem;
@@ -9678,12 +9715,6 @@ header.masthead h1 {
 }
 
 @media (min-width: 992px) {
-  header.masthead {
-    height: 30vh;
-    min-height: 30rem;
-    padding-top: 72px;
-    padding-bottom: 0;
-  }
   header.masthead p {
     font-size: 1.15rem;
   }

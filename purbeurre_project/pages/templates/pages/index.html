@@ -1,0 +1,44 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block header %}
+  <!-- Masthead -->
+    <h1 class="text-uppercase text-white font-weight-bold">
+      Du gras, oui mais de qualité !
+    </h1>
+    <h2>
+      Trouvez un produit de substitution pour ceux que vous consommez tous les jours.
+    </h2>
+    <div class="cols-lg-8 mx-auto" style="width: fit-content;">
+    <form class="form-inline text-center">
+        <div class="form-group-lg mb-2 mt-3 row">
+          <input type="text" class="form-control input-lg" id="product" placeholder="Produit">
+          <button type="submit" class="btn btn-primary">Chercher</button>
+        </div>
+    </form>
+    
+  </div>
+
+{% endblock %}
+
+{% block content-title %}{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+            <p>Welcome, {{ user.username }}. Thanks for logging in.</p>            
+            {% if latest_question_list %}
+                <ul>
+                {% for question in latest_question_list %}
+                    <li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No polls are available.</p>
+            {% endif %}
+
+        {% else %}
+            <p>Welcome, new user. Please log in.</p>
+        {% endif %}
+{% endblock %}

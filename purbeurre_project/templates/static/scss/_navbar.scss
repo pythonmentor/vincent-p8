@@ -44,6 +44,17 @@
     }
     .navbar-nav {
       .nav-item {
+        input{
+          background-color: #d3d3d36b;
+          border: solid 2px black;
+        }
+        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+          color: rgb(49, 49, 49);
+          opacity: 1; /* Firefox */
+        }
+        span{
+          display: none;
+        }
         .nav-link {
           color: fade-out($white, .3);
           padding: 0 1rem;
