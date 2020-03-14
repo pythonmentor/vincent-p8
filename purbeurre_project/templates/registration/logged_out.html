@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block header %}
+    <h1 class="text-uppercase text-white font-weight-bold">
+        Déconnexion !
+    </h1>
+{% endblock %}
+
+
+{% block content %}
+<div class="content">
+    <div class="row">
+        <div class="col-6 d-flex my-auto">
+            <h2>Vous êtes maintenant déconnecté</h2>
+        </div>
+        <div class="col-6">
+            <img src="{% static 'img/disconnect.png' %}" alt="">
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}

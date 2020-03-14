@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Mon Compte{% endblock %}
+
+{% block header %}
+<!-- Masthead -->
+  <h1 class="text-uppercase text-white font-weight-bold">
+    {% if title %}
+      {{title}} {{ user.username }}
+    {% endif %}
+  </h1>
+{% endblock %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <p>Bonjour, {{ user.username }}.</p>
+        <p>Pour rappel, voici l'email associé à votre compte :</p>
+        <h2 class="text-center my-5">
+            {{ user.email }}
+        </h2>
+    {% endif %}
+{% endblock %}

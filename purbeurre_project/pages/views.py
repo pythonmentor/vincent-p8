@@ -11,11 +11,5 @@ def legals(request):
     title = 'Mentions Légales'
     headerImg = 'header_legals.jpg'
     context = {'title': title, 'headerImg': headerImg}
-    return render(request, 'pages/content/legals.html', context)
-
-def contact(request):
-    title = 'Envoyez-nous un pigeon'
-    headerImg = 'header_contact.jpg'
-    context = {'title': title, 'headerImg': headerImg}
-    return render(request, 'pages/content/contact.html', context)
+    return render(request, 'pages/legals.html', context)
 
