@@ -11,6 +11,7 @@ psycopg2-binary = "*"
 django = "*"
 django-debug-toolbar = "*"
 python-dotenv = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"
