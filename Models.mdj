@@ -850,12 +850,9 @@
 							"_parent": {
 								"$ref": "AAAAAAFw53t0FJvrWTc="
 							},
-							"name": "user",
+							"name": "owner",
 							"length": 0,
-							"foreignKey": true,
-							"referenceTo": {
-								"$ref": "AAAAAAFw54DaHpw2ZE4="
-							}
+							"foreignKey": true
 						}
 					]
 				},

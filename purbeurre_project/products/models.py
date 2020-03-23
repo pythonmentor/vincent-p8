@@ -1,5 +1,7 @@
 from django.db import models
+from django.conf import settings
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -38,4 +40,5 @@ class Favourite(models.Model):
     '''
     codeHealthy = models.ForeignKey('Product', on_delete=models.CASCADE, related_name="healthy")
     codeUnhealthy = models.ForeignKey('Product', on_delete=models.CASCADE, related_name="unhealthy")
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # user = models.ForeignKey()
