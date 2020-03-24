@@ -6,9 +6,9 @@ from products.models import Product
 class TestProductsModels(TestCase):
 
     def setUp(self):
-        """
+        '''
         Create product 
-        """
+        '''
         Product.objects.create(name="Cococolo", code="123456")
         # Or we can write : self.product1 = Product.object......
 
