@@ -34,7 +34,7 @@ def get_openff_products(product_name):
         headers = SEARCH_HEADER)
 
     # output of request as a json file
-    if req.codes:
+    if req.codes: # BOF BOF
         return req.json()['products']
     else:
         return None

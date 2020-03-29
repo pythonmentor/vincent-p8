@@ -2,6 +2,7 @@
 ##################
 /purbeurre_project/purbeurre_project/settings.py
 **/node_modules/
+/purbeurre_project/products/management/commands/categories.json
 
 # Visual Studio Code This should ignore the entire #
 # .vscode directory, no matter where it is located.# 

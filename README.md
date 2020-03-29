@@ -23,14 +23,12 @@ creative.min.css is then compiled using `npx gulp`
 pip install foobar
 ```
 
-## Usage
+## Tests
+
+Tests can be launched in the `pipenv shell`
 
 ```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
+./manage.py test --verbosity=2
 ```
 
 ## Contributing

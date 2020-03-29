@@ -8,8 +8,6 @@ from products.views import index
 class TestUrls(SimpleTestCase):
 
     def test_index_url_resolves(self):
-        '''
-        products_index url call views.index
-        '''
+        ''' products_index url call views.index '''
         url = reverse('products_index')
         self.assertIs(resolve(url).func, index)

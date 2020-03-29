@@ -1,4 +1,3 @@
-
 from unittest.mock import Mock, patch
 from django.test import TestCase, SimpleTestCase
 from products.views import get_openff_products
