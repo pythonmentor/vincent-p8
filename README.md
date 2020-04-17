@@ -31,6 +31,11 @@ Tests can be launched in the `pipenv shell`
 ./manage.py test --verbosity=2
 ```
 
+## INIT et UPDATE
+
+importer 90 produits par categories
+Avec une limite de 9000 produits en tout
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 

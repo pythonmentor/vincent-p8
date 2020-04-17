@@ -45,11 +45,9 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto my-2 my-lg-0">
           <li class="nav-item">
-            <form method="POST" class="form text-center">
+            <form method="GET" class="form text-center" action="{% url 'products_search' %}" autocomplete="off">
               <div class="form-group-sm">
-                {% csrf_token %}
-                <input class="form-control form-control-sm mt-1 mr-3" type="text" id="product-search" placeholder="Chercher" style="width: 100px;">
-
+                <input class="form-control form-control-sm mt-1 mr-3" type="text" id="product-search" placeholder="Chercher" style="width: 100px;" name="q">
               </div>
           </form>
           </li>

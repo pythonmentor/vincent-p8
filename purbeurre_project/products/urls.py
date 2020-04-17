@@ -2,6 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # ex: /polls/
     path('', views.index, name='products_index'),
+    path('search/', views.search, name='products_search'),
 ]

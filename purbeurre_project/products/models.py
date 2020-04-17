@@ -8,6 +8,7 @@ class Product(models.Model):
     code, name, nutritionGrade, image (url),
     fat, satFat, sugar, salt, compared_to_category
     '''
+
     code = models.CharField(max_length=30, primary_key=True)
     name = models.CharField(max_length=100, null= True)
     slug = models.SlugField(max_length=100, unique=True, blank=True, null= True)
@@ -17,20 +18,20 @@ class Product(models.Model):
     satFat = models.DecimalField("Saturated fat in 100g", max_digits=5, decimal_places=2, default=0)
     sugar = models.DecimalField("Sugar in 100g", max_digits=5, decimal_places=2, default=0)
     salt = models.DecimalField("Salt in 100g", max_digits=5, decimal_places=2, default=0)
-    compared_to_category = models.ForeignKey('Category', related_name="compare_to_category", on_delete=models.CASCADE, null= True)
+    category = models.ForeignKey('Category', related_name="category", on_delete=models.CASCADE, null= True)
 
     def __str__(self):
-        return f'{self.name} {self.code}'
+        return f'{self.slug}'
     
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.name)[:50] + '-' + self.code
         super(Product, self).save(*args, **kwargs)
 
 class Category(models.Model):
     '''
-    code, name
+    name
     '''
-    product = models.ManyToManyField('Product', related_name="categories")
+    id = models.CharField(max_length=100, primary_key=True)
     name = models.CharField("Category name", max_length=100)
 
     def __str__(self):

@@ -12,11 +12,10 @@
       Trouvez un produit de substitution pour ceux que vous consommez tous les jours.
     </h2>
     <div class="cols-lg-8">
-      <form method="POST" class="form-inline text-center mx-auto" style="width: 300px;">
-        {% csrf_token %}
+      <form method="GET" class="form-inline text-center mx-auto" style="width: 300px;" name="q">
         <div class="form-group-lg mb-2 mt-3 row">
           <input type="text" class="form-control input-lg" id="product" placeholder="Produit">
-          <button type="submit" class="btn btn-primary">Chercher</button>
+          <button type="submit" class="btn btn-primary" action="{% url 'products_search' %}" autocomplete="off">Chercher</button>
         </div>
     </form>
     
