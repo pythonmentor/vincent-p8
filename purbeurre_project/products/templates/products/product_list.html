@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% block title %}Résultats de recherche{% endblock %}
+
+{% block header %}
+    <h1 class="text-uppercase text-white font-weight-bold">
+        Résultats
+    </h1>
+{% endblock %}
+
+{% block content %}
+    <h1>Voici les résultats trouvés dans la base</h1>
+    
+    {% if products_found %}
+        <ul>
+        {% for product in products_found %}
+            <li>{{ product.name }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun résultat.</p>
+    {% endif %}
+
+{% endblock %}

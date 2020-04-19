@@ -1,6 +1,7 @@
 import requests
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db.models import Q
@@ -28,3 +29,15 @@ def search(request):
     return HttpResponse(
         Product.objects.filter(Q(name__contains=name)|Q(category__name__contains=name))
         )
+
+
+class ProductsView(generic.ListView):
+    model = Product
+
+    def get_context_data(self, **kwargs):
+        name = self.request.GET.get('q')
+        context = super().get_context_data(**kwargs)
+        # name to find in product name or category
+        queryset = Product.objects.filter(Q(name__contains=name)|Q(category__name__contains=name))
+        context['products_found'] = queryset
+        return context
