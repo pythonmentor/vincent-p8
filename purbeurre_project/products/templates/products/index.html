@@ -10,18 +10,19 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-            <p>Bonjour, {{ user.username }}. Voici vos aliments favoris.</p>
-            <h1>Liste des aliments enregistrés</h1>
-            
-            {% if products %}
-                <ul>
-                {% for product in products %}
-                    <li>{{ product }}</li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>Pas encore de favoris enregistrés.</p>
-            {% endif %}
+        <p>Bonjour, {{ user.username }}. Voici vos aliments favoris.</p>
+        <h1>Liste des aliments enregistrés</h1>
+        
+        {% if products %}
+            <ul>
+            {% for product in products %}
+                <li>{{ product }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Pas encore de favoris enregistrés.</p>
+        {% endif %}
+        
 
         {% else %}
             <p>Pour voir vos favoris, veuillez vous connecter ou créer un compte.</p>

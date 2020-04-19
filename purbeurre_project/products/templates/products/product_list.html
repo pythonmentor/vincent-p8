@@ -1,4 +1,5 @@
 {% extends "base_generic.html" %}
+{% load static %}
 
 {% block title %}Résultats de recherche{% endblock %}
 
@@ -11,12 +12,48 @@
 {% block content %}
     <h1>Voici les résultats trouvés dans la base</h1>
     
-    {% if products_found %}
-        <ul>
-        {% for product in products_found %}
-            <li>{{ product.name }}</li>
-        {% endfor %}
-        </ul>
+
+
+    {% if object_list %}
+        <div class="row row-xs-xs sample-row">
+            {% for product in object_list %}
+                <div class="col-xs-12 col-sm-4 col-md-4 gutter-xs-xs gutter-margin-xs-xs mb-3">
+                    <div class="card" style="">
+                        {% if product.image %}
+                        <img src="{{ product.image }}" class="card-img-top product-thumb" alt="">
+                        {% else %}
+                        <img src="{% static 'img/product.jpg'%}" alt="" class="card-img-top product-thumb">
+                        {% endif %}
+                        {% if product.nutritionGrade %}
+                            <span class="grade grade-{{ product.nutritionGrade }}">{{ product.nutritionGrade|upper }}</span>
+                        {% endif %}
+                        <div class="card-body pt-1">
+                          <p class="card-title">{{ product.name|title|truncatechars:15 }}</p>
+                          <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                      </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?q={{ query }}&page=1">&laquo; Début</a>
+                    <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}">&lt; Précédent</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?q={{ query }}&page={{ page_obj.next_page_number }}">Suivant &gt;</a>
+                    <a href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}">Fin &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+
     {% else %}
         <p>Aucun résultat.</p>
     {% endif %}

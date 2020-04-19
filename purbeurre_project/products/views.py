@@ -33,11 +33,14 @@ def search(request):
 
 class ProductsView(generic.ListView):
     model = Product
+    paginate_by = 12
+
+    def get_queryset(self):
+        name = self.request.GET.get('q')
+        return Product.objects.filter(Q(name__contains=name)|Q(category__name__contains=name))
 
     def get_context_data(self, **kwargs):
-        name = self.request.GET.get('q')
-        context = super().get_context_data(**kwargs)
-        # name to find in product name or category
-        queryset = Product.objects.filter(Q(name__contains=name)|Q(category__name__contains=name))
-        context['products_found'] = queryset
-        return context
+         context = super().get_context_data(**kwargs)
+         # name to find in product name or category
+         context['query'] = self.request.GET.get('q')
+         return context
