@@ -9,7 +9,7 @@ class Product(models.Model):
     fat, satFat, sugar, salt, compared_to_category
     '''
 
-    code = models.CharField(max_length=30, primary_key=True)
+    code = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=100, null= True)
     slug = models.SlugField(max_length=100, unique=True, blank=True, null= True)
     nutritionGrade = models.CharField(max_length=1, null= True)
@@ -32,10 +32,15 @@ class Category(models.Model):
     name
     '''
     id = models.CharField(max_length=100, primary_key=True)
-    name = models.CharField("Category name", max_length=100)
+    name = models.CharField("Category name", max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, editable=False, null= True)
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)[:50] + '-' + str(self.id)
+        super(Category, self).save(*args, **kwargs)
 
 class Favourite(models.Model):
     ''' codeHealthy, codeUnhealthy '''

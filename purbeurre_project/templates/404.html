@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block header %}
+    <h1 class="text-uppercase text-white font-weight-bold">
+        Oups, il y a eu une erreur
+    </h1>
+{% endblock %}
+
+
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <img src="{% static 'img/404.png'%}" alt="Erreur 404">
+    </div>
+{% endblock %}

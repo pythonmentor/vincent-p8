@@ -5,21 +5,19 @@
 
 {% block header %}
     <h1 class="text-uppercase text-white font-weight-bold">
-        Résultats de recherche
+        {{ product_to_replace.name }}
     </h1>
 {% endblock %}
 
 {% block content %}
-    <h2>Voici ce qu'on a dans notre base :</h2>
-
+    <h2>Vous pouvez remplacer cet aliment par :</h2>
     {% if object_list %}
         <div class="row mt-3">
             {% for product in object_list %}
                 <div class="col-xs-12 col-sm-4 col-md-4 gutter-xs-xs gutter-margin-xs-xs mb-3">
                     <div class="card" style="">
-                        {# <a href="{% url 'products_index' %}{{ product.code }}"> #}
-                        <a href="{% url 'products_index' %}category/{{ product.category.id }}?code={{ product.code }}">
-                                {% if product.image %}
+                        <a href="{% url 'products_index' %}{{ product.code }}">
+                        {% if product.image %}
                         <img src="{{ product.image }}" class="card-img-top product-thumb" alt="">
                         {% else %}
                         <img src="{% static 'img/product.jpg'%}" alt="" class="card-img-top product-thumb">
@@ -27,9 +25,9 @@
                         {% if product.nutritionGrade %}
                             <span class="grade grade-{{ product.nutritionGrade }}"><b>{{ product.nutritionGrade|upper }}</b></span>
                         {% endif %}
-                        <div class="card-body py-1">
+                        <div class="card-body pt-1 pb-3">
                           <p class="card-title">{{ product.name|title|truncatechars:19 }}</p></a>
-                          <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                          <a href="#" class="btn btn-primary">Ajouter aux favoris</a>
                         </div>
                       </div>
                 </div>
@@ -39,8 +37,8 @@
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="?q={{ query }}&page=1">&laquo; Début</a>
-                    <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}">&lt; Précédent</a>
+                    <a href="{% url 'products_index' %}category/{{ category.id }}?code={{ product_to_replace.code }}&page=1">&laquo; Début</a>
+                    <a href="{% url 'products_index' %}category/{{ category.id }}?code={{ product_to_replace.code }}&page={{ page_obj.previous_page_number }}">&lt; Précédent</a>
                 {% endif %}
         
                 <span class="current">
@@ -48,8 +46,8 @@
                 </span>
         
                 {% if page_obj.has_next %}
-                    <a href="?q={{ query }}&page={{ page_obj.next_page_number }}">Suivant &gt;</a>
-                    <a href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}">Fin &raquo;</a>
+                    <a href="{% url 'products_index' %}category/{{ category.id }}?code={{ product_to_replace.code }}&page={{ page_obj.next_page_number }}">Suivant &gt;</a>
+                    <a href="{% url 'products_index' %}category/{{ category.id }}?code={{ product_to_replace.code }}&page={{ page_obj.paginator.num_pages }}">Fin &raquo;</a>
                 {% endif %}
             </span>
         </div>

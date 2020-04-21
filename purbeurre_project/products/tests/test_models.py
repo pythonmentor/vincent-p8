@@ -13,11 +13,11 @@ class TestProductsModels(TestCase):
     def test_product_created(self):
         product1 = Product.objects.get(code="123456")
         self.assertEqual(product1.name, "Coco colo")
-        self.assertEqual(product1.code, "123456")
+        self.assertEqual(product1.code, 123456)
 
     def test_product_slug_create(self):
         product1 = Product.objects.get(code="123456")
-        self.assertEqual(product1.slug, 'coco-colo')
+        self.assertEqual(product1.slug, 'coco-colo-123456')
 
     # def test_100g_proportion(self):
     #     """
