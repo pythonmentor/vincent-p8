@@ -23,7 +23,7 @@
     header.masthead {
       padding-top: 10rem;
       padding-bottom: calc(10rem - 72px);
-      background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url('{% if headerImg %}{% static 'pages/' %}{{ headerImg }}{% else %}{% static 'pages/header_index.jpg' %}{% endif %}');
+      background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url('{% if headerImg %}{% if 'http' in headerImg %}{{ headerImg }}{% else %}{% static 'pages/' %}{{ headerImg }}{% endif %}{% else %}{% static 'pages/header_index.jpg' %}{% endif %}');
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: scroll;

@@ -44,3 +44,11 @@ class ProductsView(generic.ListView):
          # name to find in product name or category
          context['query'] = self.request.GET.get('q')
          return context
+
+class ProductDetailView(generic.DetailView):
+    model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['headerImg'] = self.object.image
+        return context

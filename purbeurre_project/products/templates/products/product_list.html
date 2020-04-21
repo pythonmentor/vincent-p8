@@ -19,17 +19,18 @@
             {% for product in object_list %}
                 <div class="col-xs-12 col-sm-4 col-md-4 gutter-xs-xs gutter-margin-xs-xs mb-3">
                     <div class="card" style="">
+                        <a href="{% url 'products_index' %}{{ product.code }}">
                         {% if product.image %}
                         <img src="{{ product.image }}" class="card-img-top product-thumb" alt="">
                         {% else %}
                         <img src="{% static 'img/product.jpg'%}" alt="" class="card-img-top product-thumb">
                         {% endif %}
                         {% if product.nutritionGrade %}
-                            <span class="grade grade-{{ product.nutritionGrade }}">{{ product.nutritionGrade|upper }}</span>
+                            <span class="grade grade-{{ product.nutritionGrade }}"><b>{{ product.nutritionGrade|upper }}</b></span>
                         {% endif %}
-                        <div class="card-body pt-1">
-                          <p class="card-title">{{ product.name|title|truncatechars:15 }}</p>
-                          <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <div class="card-body py-1">
+                          <p class="card-title">{{ product.name|title|truncatechars:19 }}</p></a>
+                          <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                         </div>
                       </div>
                 </div>
@@ -44,7 +45,7 @@
                 {% endif %}
         
                 <span class="current">
-                    Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}.
+                    Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
                 </span>
         
                 {% if page_obj.has_next %}

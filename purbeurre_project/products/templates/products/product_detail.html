@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block title %}Résultats de recherche{% endblock %}
+
+{% block header %}
+    <h1 class="text-uppercase text-white font-weight-bold">
+        {{ object.name|title }}
+    </h1>
+{% endblock %}
+
+{% block content %}
+    <div class="row row-xs-xs sample-row mb-3">
+        <div class="col-xs-12 col-sm-6 col-md-6 mb-3">
+            <img src="{% static 'img/' %}nutriscore-{{ object.nutritionGrade }}.png" alt="nutriscore-{{ object.nutritionGrade }}" style="width: 100%;">
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <h3>
+                Repères nutritionnels pour 100g
+            </h3>
+            <ul>
+                <li>Lipides	: {{ object.fat }}g</li>
+                <li>Acides gras saturés : {{ object.satFat }}g</li>
+                <li>Sucres : {{ object.sugar }}g</li>
+                <li>Sel : {{ object.salt }}g</li>
+            </ul>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <a href="https://world.openfoodfacts.org/product/{{ object.code }}" class="btn btn-primary">Voir la fiche d'OpenFood Facts</a>
+    </div>
+
+{% endblock %}
