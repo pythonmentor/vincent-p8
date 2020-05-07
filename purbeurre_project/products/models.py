@@ -44,9 +44,14 @@ class Category(models.Model):
 
 class Favourite(models.Model):
     ''' codeHealthy, codeUnhealthy '''
-    codeHealthy = models.ForeignKey('Product', related_name="healthy", on_delete=models.CASCADE)
-    codeUnhealthy = models.ForeignKey('Product', related_name="unhealthy", on_delete=models.CASCADE)
+    healthy_product = models.ForeignKey('Product', related_name="healthy", on_delete=models.CASCADE)
+    unhealthy_product = models.ForeignKey('Product', related_name="unhealthy", on_delete=models.CASCADE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['healthy_product', 'unhealthy_product'], name='unique_favourite')
+        ]
 
     def __str__(self):
         return f'{self.codeHealthy} replaces {self.codeUnhealthy}'

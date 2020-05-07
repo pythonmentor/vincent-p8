@@ -2,20 +2,19 @@ import requests
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.db.models import Q
-from .models import Product, Category
+from .models import Product, Category, Favourite
 
 
 @login_required(login_url='/accounts/login/')
 def index(request):
-    if not request.user.is_authenticated:
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-    else:
-        products = ['produit 1', 'produit 2', 'produit 3']
-        context = {'products': products}
-        return render(request, 'products/index.html', context)
+    favourites = Favourite.objects.filter(owner = request.user)
+    context = {'favourites': favourites}
+    return render(request, 'products/favourites.html', context)
 
 
 def search(request):
@@ -24,6 +23,19 @@ def search(request):
     return HttpResponse(
         Product.objects.filter(Q(name__contains=name)|Q(category__name__contains=name))
         )
+
+@login_required(login_url='/accounts/login/')
+def save(request, pk_health, pk_unhealth):
+    ''' parameter are defined in the url path '''
+    healthy_product = Product.objects.get(code=pk_health)
+    unhealthy_product = Product.objects.get(code=pk_unhealth)
+    try:
+        favourite = Favourite(healthy_product=healthy_product, unhealthy_product=unhealthy_product, owner = request.user)
+        favourite.save()
+    except IntegrityError:
+        pass
+    # virgule parceque c'est un tuple
+    return HttpResponseRedirect(reverse('product_detail', args=(healthy_product.code,)))
 
 
 class ProductsView(generic.ListView):
@@ -40,6 +52,18 @@ class ProductsView(generic.ListView):
          # name to find in product name or category
          context['query'] = self.request.GET.get('q')
          return context
+
+
+@method_decorator(login_required, name='dispatch')
+class FavouritesView(generic.ListView):
+    ''' query string : "q" product to find'''
+    model = Favourite
+    paginate_by = 12
+    template_name = 'products/favourites_list.html'
+
+    def get_queryset(self):
+        return Favourite.objects.filter(owner=self.request.user)
+   
 
 class CompareView(generic.ListView):
     '''
@@ -58,6 +82,8 @@ class CompareView(generic.ListView):
         # nutritiongrade to compare
         nutrition_compare = self.product_to_replace.nutritionGrade
         products = Product.objects.filter(category__name=self.category)
+        # products must be differents from product_to_replace :
+        products = products.exclude(code=self.product_to_replace.code)
         return products.filter(nutritionGrade__lte=self.product_to_replace.nutritionGrade).order_by('nutritionGrade')
 
     def get_context_data(self, **kwargs):

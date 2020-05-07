@@ -1,0 +1,59 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block title %}Favoris{% endblock %}
+
+{% block header %}
+    <h1 class="text-uppercase text-white font-weight-bold">
+        Voici vos favoris
+    </h1>
+{% endblock %}
+
+{% block content %}
+    <h2>Vous avez enregistré ceci :</h2>
+    {% if object_list %}
+        <div class="row mt-3">
+            {% for favourite in object_list %}
+                <div class="col-xs-12 col-sm-4 col-md-4 gutter-xs-xs gutter-margin-xs-xs mb-3">
+                    <div class="card" style="">
+                        <a href="{% url 'products_index' %}{{ favourite.healthy_product.code }}">
+                        {% if favourite.healthy_product.image %}
+                        <img src="{{ favourite.healthy_product.image }}" class="card-img-top product-thumb" alt="">
+                        {% else %}
+                        <img src="{% static 'img/product.jpg'%}" alt="" class="card-img-top product-thumb">
+                        {% endif %}
+                        {% if favourite.healthy_product.nutritionGrade %}
+                            <span class="grade grade-{{ favourite.healthy_product.nutritionGrade }}"><b>{{ favourite.healthy_product.nutritionGrade|upper }}</b></span>
+                        {% endif %}
+                        <div class="card-body pt-1 pb-3">
+                          <p class="card-title"><b>{{ favourite.healthy_product.name|title|truncatechars:19 }}</b></p></a>
+                          <a href="{% url 'products_index' %}{{ favourite.unhealthy_product.code }}">Produit remplacé</a>
+                        </div>
+                      </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="{% url 'products_index' %}&page=1">&laquo; Début</a>
+                    <a href="{% url 'products_index' %}&page={{ page_obj.previous_page_number }}">&lt; Précédent</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="{% url 'products_index' %}&page={{ page_obj.next_page_number }}">Suivant &gt;</a>
+                    <a href="{% url 'products_index' %}&page={{ page_obj.paginator.num_pages }}">Fin &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+
+    {% else %}
+        <p>Aucun résultat.</p>
+    {% endif %}
+
+{% endblock %}

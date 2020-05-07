@@ -13,10 +13,10 @@
         <p>Bonjour, {{ user.username }}. Voici vos aliments favoris.</p>
         <h1>Liste des aliments enregistrés</h1>
         
-        {% if products %}
+        {% if favourites %}
             <ul>
-            {% for product in products %}
-                <li>{{ product }}</li>
+            {% for favourite in favourites %}
+                <li>{{ favourite.healthy_product.name }} remplace {{ favourite.unhealthy_product.name }}</li>
             {% endfor %}
             </ul>
         {% else %}

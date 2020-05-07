@@ -26,8 +26,11 @@
                             <span class="grade grade-{{ product.nutritionGrade }}"><b>{{ product.nutritionGrade|upper }}</b></span>
                         {% endif %}
                         <div class="card-body pt-1 pb-3">
-                          <p class="card-title">{{ product.name|title|truncatechars:19 }}</p></a>
-                          <a href="#" class="btn btn-primary">Ajouter aux favoris</a>
+                          <p class="card-title"><b>{{ product.name|title|truncatechars:19 }}</b></p></a>
+                          <form action="{% url 'products_index' %}save/{{ product.code }}/{{ product_to_replace.code }}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Sauvegarder</button>
+                          </form>
                         </div>
                       </div>
                 </div>
@@ -53,7 +56,7 @@
         </div>
 
     {% else %}
-        <p>Aucun résultat.</p>
+        <p>Désolé, on n'a pas trouvé mieux !</p>
     {% endif %}
 
 {% endblock %}
