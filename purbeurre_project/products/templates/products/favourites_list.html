@@ -27,7 +27,11 @@
                         {% endif %}
                         <div class="card-body pt-1 pb-3">
                           <p class="card-title"><b>{{ favourite.healthy_product.name|title|truncatechars:19 }}</b></p></a>
-                          <a href="{% url 'products_index' %}{{ favourite.unhealthy_product.code }}">Produit remplacé</a>
+                          
+                            <form action="{% url 'products_index' %}delete/{{ favourite.healthy_product.code }}/{{ favourite.unhealthy_product.code }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-secondary"><i class="fas fa-trash"></i> Supprimer</button>
+                            </form>
                         </div>
                       </div>
                 </div>

@@ -1,12 +1,13 @@
 import requests
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.urls import reverse
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.db.models import Q
+from django.template.defaulttags import register
 from .models import Product, Category, Favourite
 
 
@@ -34,9 +35,20 @@ def save(request, pk_health, pk_unhealth):
         favourite.save()
     except IntegrityError:
         pass
-    # virgule parceque c'est un tuple
-    return HttpResponseRedirect(reverse('product_detail', args=(healthy_product.code,)))
+    return redirect(request.META.get('HTTP_REFERER'))
 
+
+@login_required(login_url='/accounts/login/')
+def delete(request, pk_health, pk_unhealth):
+    ''' parameter are defined in the url path '''
+    healthy_product = Product.objects.get(code=pk_health)
+    unhealthy_product = Product.objects.get(code=pk_unhealth)
+    try:
+        favourite = Favourite.objects.get(healthy_product=healthy_product, unhealthy_product=unhealthy_product, owner = request.user)
+        favourite.delete()
+    except IntegrityError:
+        pass
+    return redirect(request.META.get('HTTP_REFERER'))
 
 class ProductsView(generic.ListView):
     ''' query string : "q" product to find'''
@@ -87,12 +99,27 @@ class CompareView(generic.ListView):
         return products.filter(nutritionGrade__lte=self.product_to_replace.nutritionGrade).order_by('nutritionGrade')
 
     def get_context_data(self, **kwargs):
-         context = super().get_context_data(**kwargs)
-         # name to find in product name or category
-         context['category'] = self.category
-         context['product_to_replace'] = self.product_to_replace
-         context['headerImg'] = self.product_to_replace.image
-         return context
+        context = super().get_context_data(**kwargs)
+        # name to find in product name or category
+        context['category'] = self.category
+        context['product_to_replace'] = self.product_to_replace
+        context['headerImg'] = self.product_to_replace.image
+        products = Product.objects.filter(category__name=self.category)
+        context['in_fav'] = [prod.code for prod in products if Favourite.objects.filter(healthy_product=prod.code, unhealthy_product=self.product_to_replace.code).exists()]
+        # for prod in products:
+        #     context[prod.code] = Favourite.objects.filter(healthy_product=prod.code).exists()
+        return context
+    
+    @register.filter
+    def get_item(dictionary, key):
+        return dictionary.get(key)
+    # def get(self, request, *args, **kwargs):
+    #     ''' since we redirect to same page we render the page instead of redirecting to it '''
+    #     self.object = self.get_object()
+    #     if check.objects.filter(active=True):
+    #         return redirect(reverse('service', kwargs={"pk": self.object.pk}))
+    #     else:
+    #        return render(self.request, 'page/details.html', {'jobs': Jobs.objects.all()})
 
 class ProductDetailView(generic.DetailView):
     '''

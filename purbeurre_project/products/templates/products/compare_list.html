@@ -27,10 +27,19 @@
                         {% endif %}
                         <div class="card-body pt-1 pb-3">
                           <p class="card-title"><b>{{ product.name|title|truncatechars:19 }}</b></p></a>
-                          <form action="{% url 'products_index' %}save/{{ product.code }}/{{ product_to_replace.code }}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Sauvegarder</button>
-                          </form>
+                          
+                        {% if product.code in in_fav %}
+                            <form action="{% url 'products_index' %}delete/{{ product.code }}/{{ product_to_replace.code }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-secondary"><i class="fas fa-trash"></i> Supprimer</button>
+                            </form>
+                            {% else %}
+                            <form action="{% url 'products_index' %}save/{{ product.code }}/{{ product_to_replace.code }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Sauvegarder</button>
+                            </form>
+                        {% endif %}
+                          
                         </div>
                       </div>
                 </div>
