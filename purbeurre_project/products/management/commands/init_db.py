@@ -1,15 +1,3 @@
-# Update true parse arg :
-    # ne pas supprimer les produits qui sont en favoris
-
-    # supprimer les produits qui ne sont plus dans ooff 
-
-    # compter les produits en favoris
-
-# importer 90 produits par categories
-    # avec une limite de 9000 produits en tout
-
-    # les enregistrer dans la base
-
 import requests
 from json import load, dump
 from django.core.management.base import BaseCommand, CommandError
@@ -22,15 +10,15 @@ class Command(BaseCommand):
     help = 'Create DB and populate it'
 
     def handle(self, *args, **options):
-        # ouvrir json
+        # open json of all categories
         with open('products/management/commands/categories_cleaned.json', 'r') as json_file:
             categories = load(json_file)
             for category in categories:
                 category_DB, created = Category.objects.update_or_create(
-                    id = category,
-                    defaults = {
-                        "id" : category,
-                        "name" : categories[category]
+                    id=category,
+                    defaults={
+                        "id": category,
+                        "name": categories[category]
                     }
                 )
                 
@@ -44,6 +32,7 @@ class Command(BaseCommand):
                 count = 0
 
                 for item in products:
+                    # assign attributes to product
                     sugar = item["nutriments"].get("sugars_100g", 0)
                     satFat = item["nutriments"].get("saturated-fat_100g", 0)
                     salt = item["nutriments"].get("salt_100g", 0)
@@ -52,33 +41,18 @@ class Command(BaseCommand):
                         product_DB, created = Product.objects.update_or_create(
                             code=item["code"],
                             defaults={
-                                "code" : item["code"],
-                                "name" : item.get("product_name", item.get("product_name_fr")),
-                                "nutritionGrade" : item.get("nutriscore_grade"),
-                                "image" : item.get("selected_images", {}).get("front", {}).get("display", {}).get("fr"),
-                                "sugar" : sugar,
-                                "satFat" : satFat,
-                                "salt" : salt,
-                                "fat" : fat,
-                                "category" : category_DB
+                                "code": item["code"],
+                                "name": item.get("product_name", item.get("product_name_fr")),
+                                "nutritionGrade": item.get("nutriscore_grade"),
+                                "image": item.get("selected_images", {}).get("front", {}).get("display", {}).get("fr"),
+                                "sugar": sugar,
+                                "satFat": satFat,
+                                "salt"  salt,
+                                "fat": fat,
+                                "category": category_DB
                             },
                         )
                         count += 1
                     if count >= 90:
                         count = 0
                         break
-
-
-        # list of product of the output
-        # products_output = req_output['products']
-
-        # for poll_id in options['poll_ids']:
-        #     try:
-        #         poll = Poll.objects.get(pk=poll_id)
-        #     except Poll.DoesNotExist:
-        #         raise CommandError('Poll "%s" does not exist' % poll_id)
-
-        #     poll.opened = False
-        #     poll.save()
-
-        #     self.stdout.write(self.style.SUCCESS('Successfully closed poll "%s"' % poll_id))

@@ -21,7 +21,7 @@ urlpatterns = [
     path('', include('pages.urls')),
     path('admin/', admin.site.urls),
     path('products/', include('products.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/profile/', auth_views.LoginView.as_view(template_name='account/index.html', extra_context={'title': 'Ahoy!', 'headerImg': 'header_contact.jpg'}), name='profile'),
-    path('polls/', include('polls.urls')),
+    path('account/', include('django.contrib.auth.urls')),
+    path('account/', include('account.urls')),
+    path('account/profile/', auth_views.LoginView.as_view(template_name='account/index.html', extra_context={'title': 'Ahoy!', 'headerImg': 'header_contact.jpg'}), name='profile'),
 ]

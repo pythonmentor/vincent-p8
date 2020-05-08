@@ -1,14 +1,14 @@
 from django.test import TestCase
 from django.db.utils import IntegrityError
-
 from products.models import Product
+
 
 class TestProductsModels(TestCase):
 
     def setUp(self):
         ''' Create product '''
         Product.objects.create(name="Coco colo", code="123456")
-        # Or we can write : self.product1 = Product.object 
+        # Or we can write : self.product1 = Product.object
         # but here we use a get
 
     def test_product_created(self):
@@ -19,6 +19,7 @@ class TestProductsModels(TestCase):
     def test_product_slug_create(self):
         product1 = Product.objects.get(code="123456")
         self.assertEqual(product1.slug, 'coco-colo-123456')
+
 
 class TestDoubleCode(TestCase):
 

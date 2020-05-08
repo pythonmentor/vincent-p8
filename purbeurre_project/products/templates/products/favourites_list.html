@@ -28,7 +28,7 @@
                         <div class="card-body pt-1 pb-3">
                           <p class="card-title"><b>{{ favourite.healthy_product.name|title|truncatechars:19 }}</b></p></a>
                           
-                            <form action="{% url 'products_index' %}delete/{{ favourite.healthy_product.code }}/{{ favourite.unhealthy_product.code }}">
+                            <form  method="POST" action="{% url 'product_delete' favourite.healthy_product.code favourite.unhealthy_product.code %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-secondary"><i class="fas fa-trash"></i> Supprimer</button>
                             </form>

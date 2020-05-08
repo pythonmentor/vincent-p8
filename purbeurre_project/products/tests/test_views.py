@@ -1,7 +1,7 @@
 from unittest.mock import Mock, patch
 from django.test import TestCase, SimpleTestCase
-from django.urls import reverse, resolve
-from .mock import OPENFF_REQUEST
+# from django.urls import reverse, resolve
+# from .mock import OPENFF_REQUEST
 
 
 class TestViews(SimpleTestCase):

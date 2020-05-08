@@ -1,5 +1,13 @@
 from django.contrib import admin
+from . models import Product, Favourite
 
-from . models import Product
 
-admin.site.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code', 'nutritionGrade', 'category',)
+    list_filter = ('nutritionGrade',)
+    ordering = ('category', 'nutritionGrade', )
+    search_fields = ('name', 'category',)
+
+
+admin.site.register(Product, ProductAdmin)
+admin.site.register(Favourite)

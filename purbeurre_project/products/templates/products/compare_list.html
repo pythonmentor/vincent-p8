@@ -15,8 +15,8 @@
         <div class="row mt-3">
             {% for product in object_list %}
                 <div class="col-xs-12 col-sm-4 col-md-4 gutter-xs-xs gutter-margin-xs-xs mb-3">
-                    <div class="card" style="">
-                        <a href="{% url 'products_index' %}{{ product.code }}">
+                    <div class="card">
+                        <a href="{% url 'product_detail' product.code %}">
                         {% if product.image %}
                         <img src="{{ product.image }}" class="card-img-top product-thumb" alt="">
                         {% else %}
@@ -26,20 +26,23 @@
                             <span class="grade grade-{{ product.nutritionGrade }}"><b>{{ product.nutritionGrade|upper }}</b></span>
                         {% endif %}
                         <div class="card-body pt-1 pb-3">
-                          <p class="card-title"><b>{{ product.name|title|truncatechars:19 }}</b></p></a>
-                          
-                        {% if product.code in in_fav %}
-                            <form action="{% url 'products_index' %}delete/{{ product.code }}/{{ product_to_replace.code }}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-secondary"><i class="fas fa-trash"></i> Supprimer</button>
-                            </form>
-                            {% else %}
-                            <form action="{% url 'products_index' %}save/{{ product.code }}/{{ product_to_replace.code }}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Sauvegarder</button>
-                            </form>
-                        {% endif %}
-                          
+                            <p class="card-title"><b>{{ product.name|title|truncatechars:19 }}</b></p></a>
+                            
+                            {% if user.is_authenticated %}
+
+                                {% if product.code in in_fav %}
+                                    <form method="POST" action="{% url 'product_delete' product.code product_to_replace.code %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-secondary"><i class="fas fa-trash"></i> Supprimer</button>
+                                    </form>
+                                    {% else %}
+                                    <form method="POST" action="{% url 'product_save' product.code product_to_replace.code %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Sauvegarder</button>
+                                    </form>
+                                {% endif %}
+                                
+                            {% endif %}
                         </div>
                       </div>
                 </div>
@@ -49,8 +52,8 @@
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="{% url 'products_index' %}category/{{ category.id }}?code={{ product_to_replace.code }}&page=1">&laquo; Début</a>
-                    <a href="{% url 'products_index' %}category/{{ category.id }}?code={{ product_to_replace.code }}&page={{ page_obj.previous_page_number }}">&lt; Précédent</a>
+                    <a href="?code={{ product_to_replace.code }}&page=1">&laquo; Début</a>
+                    <a href="?code={{ product_to_replace.code }}&page={{ page_obj.previous_page_number }}">&lt; Précédent</a>
                 {% endif %}
         
                 <span class="current">
@@ -58,8 +61,8 @@
                 </span>
         
                 {% if page_obj.has_next %}
-                    <a href="{% url 'products_index' %}category/{{ category.id }}?code={{ product_to_replace.code }}&page={{ page_obj.next_page_number }}">Suivant &gt;</a>
-                    <a href="{% url 'products_index' %}category/{{ category.id }}?code={{ product_to_replace.code }}&page={{ page_obj.paginator.num_pages }}">Fin &raquo;</a>
+                    <a href="?code={{ product_to_replace.code }}&page={{ page_obj.next_page_number }}">Suivant &gt;</a>
+                    <a href="?code={{ product_to_replace.code }}&page={{ page_obj.paginator.num_pages }}">Fin &raquo;</a>
                 {% endif %}
             </span>
         </div>

@@ -10,19 +10,18 @@
 
 {% block content %}
     {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
+    <p>Le mot de passe et le nom d'utilisateur ne correspondent pas, réessayez.</p>
     {% endif %}
 
     {% if next %}
         {% if user.is_authenticated %}
-        <p>Your account doesn't have access to this page. To proceed,
-        please login with an account that has access.</p>
+        <p>Votre compte ne vous permet pas d'accéder à cette pager.</p>
         {% else %}
-        <p>Please login to see this page.</p>
+        <p>Veuillez vous <a href="{% url 'login' %}">connecter</a>.</p>
         {% endif %}
     {% endif %}
 
-    <form method="post" action="{% url 'login' %}">
+    <form method="POST" action="{% url 'login' %}">
     {% csrf_token %}
     <table>
     <tr>
@@ -35,10 +34,10 @@
     </tr>
     </table>
 
-    <input type="submit" value="login" class="btn btn-primary">
+    <input type="submit" value="Se connecter" class="btn btn-primary">
     <input type="hidden" name="next" value="{{ next }}">
     </form>
 
     {# Assumes you setup the password_reset view in your URLconf #}
-    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+    <p><a href="{% url 'password_reset' %}">Mot de passe perdu ?</a> | <a href="{% url 'signup' %}">Créer un compte</a></p>
 {% endblock %}
