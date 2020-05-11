@@ -16,7 +16,7 @@
             {% for product in object_list %}
                 <div class="col-xs-12 col-sm-4 col-md-4 gutter-xs-xs gutter-margin-xs-xs mb-3">
                     <div class="card">
-                        <a href="{% url 'product_detail' product.code %}">
+                        <a href="{% url 'products:detail' product.code %}">
                         {% if product.image %}
                         <img src="{{ product.image }}" class="card-img-top product-thumb" alt="">
                         {% else %}
@@ -31,12 +31,12 @@
                             {% if user.is_authenticated %}
 
                                 {% if product.code in in_fav %}
-                                    <form method="POST" action="{% url 'product_delete' product.code product_to_replace.code %}">
+                                    <form method="POST" action="{% url 'products:delete' product.code product_to_replace.code %}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-secondary"><i class="fas fa-trash"></i> Supprimer</button>
                                     </form>
                                     {% else %}
-                                    <form method="POST" action="{% url 'product_save' product.code product_to_replace.code %}">
+                                    <form method="POST" action="{% url 'products:save' product.code product_to_replace.code %}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Sauvegarder</button>
                                     </form>

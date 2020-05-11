@@ -15,8 +15,8 @@
         <div class="row mt-3">
             {% for favourite in object_list %}
                 <div class="col-xs-12 col-sm-4 col-md-4 gutter-xs-xs gutter-margin-xs-xs mb-3">
-                    <div class="card" style="">
-                        <a href="{% url 'products_index' %}{{ favourite.healthy_product.code }}">
+                    <div class="card">
+                        <a href="{% url 'products:index' %}{{ favourite.healthy_product.code }}">
                         {% if favourite.healthy_product.image %}
                         <img src="{{ favourite.healthy_product.image }}" class="card-img-top product-thumb" alt="">
                         {% else %}
@@ -28,7 +28,7 @@
                         <div class="card-body pt-1 pb-3">
                           <p class="card-title"><b>{{ favourite.healthy_product.name|title|truncatechars:19 }}</b></p></a>
                           
-                            <form  method="POST" action="{% url 'product_delete' favourite.healthy_product.code favourite.unhealthy_product.code %}">
+                            <form  method="POST" action="{% url 'products:delete' favourite.healthy_product.code favourite.unhealthy_product.code %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-secondary"><i class="fas fa-trash"></i> Supprimer</button>
                             </form>
@@ -41,8 +41,8 @@
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="{% url 'products_index' %}&page=1">&laquo; Début</a>
-                    <a href="{% url 'products_index' %}&page={{ page_obj.previous_page_number }}">&lt; Précédent</a>
+                    <a href="{% url 'products:index' %}&page=1">&laquo; Début</a>
+                    <a href="{% url 'products:index' %}&page={{ page_obj.previous_page_number }}">&lt; Précédent</a>
                 {% endif %}
         
                 <span class="current">
@@ -50,8 +50,8 @@
                 </span>
         
                 {% if page_obj.has_next %}
-                    <a href="{% url 'products_index' %}&page={{ page_obj.next_page_number }}">Suivant &gt;</a>
-                    <a href="{% url 'products_index' %}&page={{ page_obj.paginator.num_pages }}">Fin &raquo;</a>
+                    <a href="{% url 'products:index' %}&page={{ page_obj.next_page_number }}">Suivant &gt;</a>
+                    <a href="{% url 'products:index' %}&page={{ page_obj.paginator.num_pages }}">Fin &raquo;</a>
                 {% endif %}
             </span>
         </div>

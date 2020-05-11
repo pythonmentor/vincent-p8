@@ -18,10 +18,10 @@ from django.urls import include, path
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', include('pages.urls')),
+    path('', include('pages.urls', namespace="pages")),
     path('admin/', admin.site.urls),
-    path('products/', include('products.urls')),
+    path('products/', include('products.urls', namespace="products")),
     path('account/', include('django.contrib.auth.urls')),
-    path('account/', include('account.urls')),
+    path('account/', include('account.urls', namespace="account")),
     path('account/profile/', auth_views.LoginView.as_view(template_name='account/index.html', extra_context={'title': 'Ahoy!', 'headerImg': 'header_contact.jpg'}), name='profile'),
 ]

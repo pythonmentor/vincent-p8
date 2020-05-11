@@ -37,7 +37,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
     <div class="container">
-      <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" class="logo">
+      <a class="navbar-brand" href="{% url 'pages:index' %}"><img src="{% static 'img/logo.png' %}" class="logo">
         Purbeurre</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -45,7 +45,7 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto my-2 my-lg-0">
           <li class="nav-item">
-            <form method="GET" class="form text-center" action="{% url 'products_search' %}" autocomplete="off">
+            <form method="GET" class="form text-center" action="{% url 'products:search' %}" autocomplete="off">
               <div class="form-group-sm">
                 <input class="form-control form-control-sm mt-1 mr-3" type="text" id="product-search" placeholder="Chercher" style="width: 100px;" name="q">
               </div>
@@ -66,7 +66,7 @@
           </li>
           {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'products_index' %}">
+            <a class="nav-link" href="{% url 'products:index' %}">
               <img src="{% static 'img/icon_food.png' %}" alt="Mes aliments" title="Mes aliments">
               <span>Mes aliments</span>
             </a>
@@ -110,8 +110,8 @@
   <!-- Footer -->
   <footer class="bg-light py-5">
     <div class="container d-flex justify-content-around">
-      <div class="text-center text-muted"><a href="/mentions-legales">Mentions L&eacute;gales</a></div>
-      <div class="text-center text-muted"><a href="{% url 'index' %}#contact">Contact</a></div>
+      <div class="text-center text-muted"><a href="{% url 'pages:legals' %}">Mentions L&eacute;gales</a></div>
+      <div class="text-center text-muted"><a href="{% url 'pages:index' %}#contact">Contact</a></div>
     </div>
   </footer>
 

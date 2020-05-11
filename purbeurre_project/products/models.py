@@ -80,4 +80,5 @@ class Favourite(models.Model):
                 fields=['healthy_product', 'unhealthy_product'],
                 name='unique_favourite')
         ]
+        ordering = ['healthy_product']
 
