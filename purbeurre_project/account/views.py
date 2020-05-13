@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import SignUpForm
 
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/account/login/')
 def index(request):
     if not request.user.is_authenticated:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))

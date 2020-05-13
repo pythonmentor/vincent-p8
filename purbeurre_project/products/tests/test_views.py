@@ -1,10 +1,9 @@
 from unittest.mock import Mock, patch
-from django.test import TestCase, SimpleTestCase
+from django.test import TestCase, SimpleTestCase, RequestFactory, Client
 from django.urls import reverse, resolve
+from django.contrib.auth.models import User, AnonymousUser
 from products import views
-from django.test import Client
 from products.models import Product, Category
-from django.contrib.auth.models import User
 
 # from .mock import OPENFF_REQUEST
 
@@ -12,9 +11,9 @@ class Test404(SimpleTestCase):
 
     def test_404_view(self):
         response = self.client.get('/false_URL')
-        # test status code
+        # User open a wrong url
         self.assertEqual(response.status_code, 404)
-        # test if good template is used
+        # a template is dedicated for that
         self.assertEqual(response.templates[0].name, '404.html')
 
 class TestViews(TestCase):
@@ -38,7 +37,7 @@ class TestViews(TestCase):
         cls.user1 = User.objects.create_user('user1name', 'user1@email.com', 'user1password')
 
     def setUp(self):
-        pass
+        self.factory = RequestFactory()
 
     #########################
     #     TEST INDEX        #
@@ -58,36 +57,55 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         # Check our user is logged in
         self.assertEqual(str(response.context['user']), 'user1name')
+        self.assertTemplateUsed(response, 'products/favourites_list.html')
+
+    def test_anonymousUser_open_index(self):
+        # Someone tries to open products index
+        url = reverse('products:index')
+        response = self.client.get(url)
+        # As an anonymousUser
+        self.assertEqual(
+            response.context.get('user', None),
+            None)
+        # And get redirected to login
+        self.assertRedirects(
+            response,
+            reverse('account:login'),
+            status_code=302,
+            target_status_code=200)
+
 
     #########################
     #     TEST SEARCH       #
     #########################
-    def test_search_resolves(self):
-        response = self.client.get(reverse('products:search'), data={'q': self.prod1.name})
-        # Test if page found
+    def test_search(self):
+        url = reverse('products:search')
+        response = self.client.get(url, data={'q': self.prod1.name})
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/product_list.html')
         # Test if response contains product searched
         self.assertContains(response, 'Prod1')
-
-    def test_search_template(self):
-        response = self.client.get(reverse('products:search'), data={'q': self.prod1.name})
-        self.assertTemplateUsed(response, 'products/product_list.html')
 
     #########################
     #    TEST COMPARE       #
     #########################
     def test_compare_resolves(self):
+        url = reverse(
+            'products:compare',
+            args=[self.category.id])
         response = self.client.get(
-            reverse('products:compare', args=[self.category.id]),
+            url,
             data={'code': self.prod1.code})
-        # Test if page found
         self.assertEqual(response.status_code, 200)
         # Test if response contains product searched
         self.assertContains(response, 'Prod1')
 
     def test_pagination_is_twelve(self):
+        url = reverse(
+            'products:compare',
+            args=[self.category.id])
         response = self.client.get(
-            reverse('products:compare', args=[self.category.id]),
+            url,
             data={'code': self.prod1.code})
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)
@@ -97,8 +115,9 @@ class TestViews(TestCase):
     def test_lists_all_candidates(self):
         # Get second page and confirm it has 
         # exactly remaining (15-1-12=2) items
+        url = reverse('products:compare', args=[self.category.id])
         response = self.client.get(
-            reverse('products:compare', args=[self.category.id]),
+            url,
             data={'code': self.prod1.code, 'page': 2})
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)

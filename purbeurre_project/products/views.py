@@ -10,12 +10,6 @@ from django.template.defaulttags import register
 from .models import Product, Category, Favourite
 
 
-@login_required
-def index(request):
-    favourites = Favourite.objects.filter(owner=request.user)
-    favourites = favourites.order_by('healthy_product__code')
-    context = {'favourites': favourites}
-    return render(request, 'products/favourites.html', context)
 
 
 def search(request):
