@@ -1,24 +1,10 @@
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.views import generic
-# from django.urls import reverse
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.db.models import Q
 from django.template.defaulttags import register
 from .models import Product, Category, Favourite
-
-
-
-
-def search(request):
-    name = request.GET['q']
-    # faire une vue générique avec une liste
-    return HttpResponse(
-        Product.objects.filter(
-            Q(name__contains=name) | Q(category__name__contains=name))
-        )
 
 
 @login_required
@@ -61,9 +47,7 @@ class ProductsView(generic.ListView):
 
     def get_queryset(self):
         name = self.request.GET.get('q')
-        return Product.objects.filter(
-            Q(name__contains=name) | Q(category__name__contains=name)
-            )
+        return Product.objects.similar(name)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

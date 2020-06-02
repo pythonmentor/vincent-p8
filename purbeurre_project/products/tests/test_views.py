@@ -1,9 +1,9 @@
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 from django.test import TestCase, SimpleTestCase, RequestFactory, Client
 from django.urls import reverse, resolve
 from django.contrib.auth.models import User, AnonymousUser
-from products import views
-from products.models import Product, Category
+from products import views, models
+from products.models import Product, Category, ProductManager
 
 # from .mock import OPENFF_REQUEST
 
@@ -20,7 +20,6 @@ class TestViews(TestCase):
 
     @classmethod  # <- setUpTestData must be a class method
     def setUpTestData(cls):
-        cls.client = Client()
         # create one category for all products created
         Category.objects.create(
             id="fruits:fr",
@@ -35,9 +34,22 @@ class TestViews(TestCase):
                 category=cls.category)
         cls.prod1 = Product.objects.get(code=1)
         cls.user1 = User.objects.create_user('user1name', 'user1@email.com', 'user1password')
+        cls.prodperso = Product(code='1234', name='toto')
 
     def setUp(self):
         self.factory = RequestFactory()
+
+
+    # @patch('products.models.Product.objects.similar')
+    def test_ProductsView(self):
+        m_queryset = Mock(models.ProductManager.similar)
+        m_queryset.return_value = [self.prodperso]
+        # Call the service, which will send a request to the server.
+        url = reverse('products:search')
+        response = self.client.get(url, data={'q': self.prodperso.name})
+        # import pdb
+        # pdb.set_trace()
+        self.assertContains(response, 'Toto')
 
     #########################
     #     TEST INDEX        #
@@ -62,15 +74,19 @@ class TestViews(TestCase):
     def test_anonymousUser_open_index(self):
         # Someone tries to open products index
         url = reverse('products:index')
-        response = self.client.get(url)
+        webpage = self.client.get(url)
+        # import pdb;
+        # pdb.set_trace()
+        # dir(webpage)
+
         # As an anonymousUser
         self.assertEqual(
-            response.context.get('user', None),
+            webpage.context,
             None)
         # And get redirected to login
         self.assertRedirects(
-            response,
-            reverse('account:login'),
+            webpage,
+            reverse('login')+'?next='+url,
             status_code=302,
             target_status_code=200)
 

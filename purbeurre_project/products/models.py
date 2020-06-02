@@ -3,12 +3,20 @@ from django.conf import settings
 from django.utils.text import slugify
 
 
+class ProductManager(models.Manager):
+    def similar(self, name):
+        return self.filter(
+            models.Q(name__contains=name) | models.Q(category__name__contains=name)
+        )
+
+
 class Product(models.Model):
     '''
     code, name, nutritionGrade, image (url),
     fat, satFat, sugar, salt, compared_to_category
     '''
 
+    objects = ProductManager()
     code = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=100, null=True, verbose_name="Nom")
     slug = models.SlugField(max_length=100, unique=True, blank=True, null=True)

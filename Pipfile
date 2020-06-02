@@ -12,6 +12,7 @@ django = "*"
 django-debug-toolbar = "*"
 python-dotenv = "*"
 requests = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.8"

@@ -21,10 +21,12 @@ class TestProductsModels(TestCase):
             name="Cocu colu",
             code="789")
         # Or we can write : self.product1 = Product.object
+        
+        cls.prod1 = Product.objects.get(code="123456")
+        cls.prod2 = Product.objects.get(code="456")
 
     def setUp(self):
-        self.prod1 = Product.objects.get(code="123456")
-        self.prod2 = Product.objects.get(code="456")
+        pass
 
     def test_product_created(self):
         self.assertEqual(self.prod1.name, "Coco colo")

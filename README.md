@@ -31,6 +31,13 @@ Tests can be launched in the `pipenv shell`
 ./manage.py test --verbosity=2
 ```
 
+Coverage is studied by 
+```python
+coverage run --source='.' manage.py test myapp
+````
+
+and then `coverage report`
+
 ## INIT et UPDATE
 
 importer 90 produits par categories
