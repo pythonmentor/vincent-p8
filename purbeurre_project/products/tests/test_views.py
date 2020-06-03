@@ -16,6 +16,16 @@ class Test404(SimpleTestCase):
         # a template is dedicated for that
         self.assertEqual(response.templates[0].name, '404.html')
 
+class TestSearch(TestCase):
+
+    @patch('products.models.ProductManager.similar')
+    def test_ProductsView(self, mock_similar):
+        mock_category = Category(id="fruits:fr", name="Fruits")
+        mock_similar.return_value = [Product(code='1234', name='toto', category=mock_category)]
+        url = reverse('products:search')
+        response = self.client.get(url, data={'q': 'toto'})
+        self.assertContains(response, 'Toto')
+
 class TestViews(TestCase):
 
     @classmethod  # <- setUpTestData must be a class method
@@ -41,15 +51,16 @@ class TestViews(TestCase):
 
 
     # @patch('products.models.Product.objects.similar')
-    def test_ProductsView(self):
-        m_queryset = Mock(models.ProductManager.similar)
-        m_queryset.return_value = [self.prodperso]
-        # Call the service, which will send a request to the server.
-        url = reverse('products:search')
-        response = self.client.get(url, data={'q': self.prodperso.name})
-        # import pdb
-        # pdb.set_trace()
-        self.assertContains(response, 'Toto')
+    # def test_ProductsView(self):
+    #     m_queryset = Mock(models.ProductManager.similar)
+    #     m_queryset.return_value = [self.prodperso]
+    #     # Call the service, which will send a request to the server.
+    #     url = reverse('products:search')
+    #     response = self.client.get(url, data={'q': self.prodperso.name})
+    #     # import pdb
+    #     # pdb.set_trace()
+    #     self.assertContains(response, 'Toto')
+
 
     #########################
     #     TEST INDEX        #

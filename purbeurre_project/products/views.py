@@ -44,6 +44,7 @@ class ProductsView(generic.ListView):
     ''' GET param : "q" product to find'''
     model = Product
     paginate_by = 12
+    template_name = 'products/product_list.html'
 
     def get_queryset(self):
         name = self.request.GET.get('q')
