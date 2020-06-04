@@ -1,12 +1,15 @@
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 from django.test import TestCase, SimpleTestCase, RequestFactory, Client
 from django.urls import reverse, resolve
-from django.contrib.auth.models import User, AnonymousUser
-from products import views, models
-from products.models import Product, Category, ProductManager
+from django.contrib.auth.models import User
+from products import views
+from products.models import Product, Category
 
 # from .mock import OPENFF_REQUEST
 
+#########################
+#    TEST 404           #
+#########################
 class Test404(SimpleTestCase):
 
     def test_404_view(self):
@@ -16,6 +19,66 @@ class Test404(SimpleTestCase):
         # a template is dedicated for that
         self.assertEqual(response.templates[0].name, '404.html')
 
+
+#########################
+#  TEST SAVE / DELETE   #
+#########################
+class TestSaveDelete(TestCase):
+
+    @classmethod  # <- setUpTestData must be a class method
+    def setUpTestData(cls):
+        # create one category for all products created
+        Category.objects.create(id="fruits:fr", name="Fruits frais")
+        cls.category = Category.objects.get(id="fruits:fr")
+        # create 2 products
+        for i in range(2):
+            Product.objects.create(
+                name="prod"+str(i),
+                code=str(i),
+                nutritionGrade='b',
+                category=cls.category)
+        # create a user just for this test
+        cls.user1 = User.objects.create_user(
+            'user1name',
+            'user1@email.com',
+            'user1password')
+        cls.prod1 = Product.objects.get(code=1)
+
+    def setUp(self):
+        self.client.login(username='user1name', password='user1password')
+        self.factory = RequestFactory()
+
+    def test_save_url_resolves(self):
+        # save url to call with a post
+        url = reverse('products:save', kwargs={'pk_health': 0, 'pk_unhealth': 1})
+        response = self.client.post(url, {}, HTTP_REFERER='http://mytest')
+        # And get redirected to the same origin page
+        self.assertRedirects(
+            response,
+            'http://mytest',
+            fetch_redirect_response=False,
+            status_code=302,
+            target_status_code=200)
+
+    def test_404_if_not_saved(self):
+        pass
+
+    def test_save_redirection(self):
+        pass
+
+    def test_delete_url_resolves(self):
+        pass
+
+    def test_404_if_not_delete(self):
+        pass
+
+    def test_delete_redirection(self):
+        pass
+
+
+#########################
+#     TEST SEARCH       #
+#########################
 class TestSearch(TestCase):
 
     @patch('products.models.ProductManager.similar')
@@ -26,51 +89,23 @@ class TestSearch(TestCase):
         response = self.client.get(url, data={'q': 'toto'})
         self.assertContains(response, 'Toto')
 
-class TestViews(TestCase):
 
-    @classmethod  # <- setUpTestData must be a class method
-    def setUpTestData(cls):
-        # create one category for all products created
-        Category.objects.create(
-            id="fruits:fr",
-            name="Fruits frais")
-        cls.category = Category.objects.get(id="fruits:fr")
-        # create 15 products
-        for i in range(15):
-            Product.objects.create(
-                name="prod"+str(i),
-                code=str(i),
-                nutritionGrade='b',
-                category=cls.category)
-        cls.prod1 = Product.objects.get(code=1)
-        cls.user1 = User.objects.create_user('user1name', 'user1@email.com', 'user1password')
-        cls.prodperso = Product(code='1234', name='toto')
-
-    def setUp(self):
-        self.factory = RequestFactory()
-
-
-    # @patch('products.models.Product.objects.similar')
-    # def test_ProductsView(self):
-    #     m_queryset = Mock(models.ProductManager.similar)
-    #     m_queryset.return_value = [self.prodperso]
-    #     # Call the service, which will send a request to the server.
-    #     url = reverse('products:search')
-    #     response = self.client.get(url, data={'q': self.prodperso.name})
-    #     # import pdb
-    #     # pdb.set_trace()
-    #     self.assertContains(response, 'Toto')
-
-
-    #########################
-    #     TEST INDEX        #
-    #########################
+#########################
+#    TEST FAVORITES     #
+#########################
+# test FavouritesView for learning purpose, we keep ORM calls in these tests
+class TestFavouritesView(TestCase):
 
     def test_index_url_resolves(self):
         ''' products:index url call views.index '''
+        # create a user just for this test
+        self.user1 = User.objects.create_user(
+            'user1name',
+            'user1@email.com',
+            'user1password')
         self.client.login(username='user1name', password='user1password')
         url = reverse('products:index')
-        # Compare name of functions because 
+        # Compare name of functions because
         # functions generated by as_view()
         # won't be equal due to different object ids
         self.assertIs(
@@ -86,9 +121,6 @@ class TestViews(TestCase):
         # Someone tries to open products index
         url = reverse('products:index')
         webpage = self.client.get(url)
-        # import pdb;
-        # pdb.set_trace()
-        # dir(webpage)
 
         # As an anonymousUser
         self.assertEqual(
@@ -102,20 +134,34 @@ class TestViews(TestCase):
             target_status_code=200)
 
 
-    #########################
-    #     TEST SEARCH       #
-    #########################
-    def test_search(self):
-        url = reverse('products:search')
-        response = self.client.get(url, data={'q': self.prod1.name})
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'products/product_list.html')
-        # Test if response contains product searched
-        self.assertContains(response, 'Prod1')
+#########################
+#    TEST COMPARE       #
+#########################
+class TestCompare(TestCase):
 
-    #########################
-    #    TEST COMPARE       #
-    #########################
+    @classmethod  # <- setUpTestData must be a class method
+    def setUpTestData(cls):
+        # create one category for all products created
+        Category.objects.create(
+            id="fruits:fr",
+            name="Fruits frais")
+        cls.category = Category.objects.get(id="fruits:fr")
+        # create 15 products
+        for i in range(15):
+            Product.objects.create(
+                name="prod"+str(i),
+                code=str(i),
+                nutritionGrade='b',
+                category=cls.category)
+        # create one unhealthy product to check filtering
+        Product.objects.create(
+                name="lastprod",
+                code='67890',
+                nutritionGrade='e',
+                category=cls.category)
+        cls.prod1 = Product.objects.get(code=1)
+
+
     def test_compare_resolves(self):
         url = reverse(
             'products:compare',
@@ -124,7 +170,7 @@ class TestViews(TestCase):
             url,
             data={'code': self.prod1.code})
         self.assertEqual(response.status_code, 200)
-        # Test if response contains product searched
+        # Test if response contains product searched (capitalized)
         self.assertContains(response, 'Prod1')
 
     def test_pagination_is_twelve(self):
@@ -140,8 +186,9 @@ class TestViews(TestCase):
         self.assertTrue(len(response.context['product_list']) == 12)
 
     def test_lists_all_candidates(self):
-        # Get second page and confirm it has 
-        # exactly remaining (15-1-12=2) items
+        '''
+        Get second page and confirm it has exactly remaining (15-1-12=2) items
+        '''
         url = reverse('products:compare', args=[self.category.id])
         response = self.client.get(
             url,
@@ -151,40 +198,25 @@ class TestViews(TestCase):
         self.assertTrue(response.context['is_paginated'] == True)
         self.assertTrue(len(response.context['product_list']) == 2)
 
-    #########################
-    #     TEST DETAIL       #
-    #########################
-    def test_detail_url_resolves(self):
-        ''' products:index url call views.index '''
-        url = reverse('products:detail', args=[5])
-        response = self.client.get(url)
-        # Test function used
-        self.assertIs(
-            resolve(url).func.__name__,
-            views.ProductDetailView.as_view().__name__)
-        # Test template used
-        self.assertTemplateUsed(response, 'products/product_detail.html')
 
-    #########################
-    #    TEST SAVE          #
-    #########################
-    def test_save_url_resolves(self):
-        pass
+#########################
+#     TEST DETAIL       #
+#########################
+class TestDetail(TestCase):
+    
+    def test_ProductDetailView2(self):
+        mock_category = Category(id="fruits:fr", name="Fruits")
+        mock_product = Product(code='5', name='prod5', category=mock_category)
 
-    def test_404_if_not_saved(self):
-        pass
+        with patch.object(views.ProductDetailView,'get_object',
+            return_value=mock_product):
 
-    def test_save_redirection(self):
-        pass
-
-    #########################
-    #    TEST DELETE        #
-    #########################
-    def test_delete_url_resolves(self):
-        pass
-
-    def test_404_if_not_delete(self):
-        pass
-
-    def test_delete_redirection(self):
-        pass
+            url = reverse('products:detail', args=[5])
+            response = self.client.get(url)
+            # Test function used
+            self.assertIs(
+                resolve(url).func.__name__,
+                views.ProductDetailView.as_view().__name__)
+            # Test template used
+            self.assertTemplateUsed(response, 'products/product_detail.html')
+            self.assertContains(response, 'Prod5')

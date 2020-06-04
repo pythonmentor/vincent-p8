@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.views import generic
+from django.urls import reverse
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -21,7 +22,10 @@ def save(request, pk_health, pk_unhealth):
         favourite.save()
     except IntegrityError:
         pass
-    return redirect(request.META.get('HTTP_REFERER'))
+    # Redirect to referer or products index if no referer
+    return redirect(
+        request.META.get('HTTP_REFERER', reverse('products:index'))
+        )
 
 
 @login_required
@@ -41,9 +45,10 @@ def delete(request, pk_health, pk_unhealth):
 
 
 class ProductsView(generic.ListView):
-    ''' GET param : "q" product to find'''
+    ''' GET param : "q" product to find '''
     model = Product
     paginate_by = 12
+    # Could skip the template_name .ListView take for template model_list.html
     template_name = 'products/product_list.html'
 
     def get_queryset(self):
@@ -79,34 +84,21 @@ class CompareView(generic.ListView):
     template_name = 'products/compare_list.html'
 
     def get_queryset(self):
-        # get captured parameter from url pattern...
-        self.category = get_object_or_404(Category, id=self.kwargs['category'])
-        # ... product to replace :
         self.product_to_replace = Product.objects.get(
-            code=self.request.GET.get('code')
-            )
-
-        # Find products from the same category ...
-        products = Product.objects.filter(category__name=self.category)
-        # ... differents from product_to_replace ...
-        products = products.exclude(code=self.product_to_replace.code)
-        # ... have a >= nutritionGrade :
-        return products.filter(
-            nutritionGrade__lte=self.product_to_replace.nutritionGrade
-            ).order_by('nutritionGrade')
+            code=self.request.GET.get('code'))
+        return Product.objects.better(self.product_to_replace)
 
     def get_context_data(self, **kwargs):
-        '''
-        Pass the context that will be used in template
-        '''
+        ''' Pass the context that will be used in template '''
         context = super().get_context_data(**kwargs)
 
-        context['category'] = self.category
+        context['category'] = self.product_to_replace.category
         context['product_to_replace'] = self.product_to_replace
         context['headerImg'] = self.product_to_replace.image
 
         # From products of the same category ...
-        products = Product.objects.filter(category__name=self.category)
+        products = Product.objects.filter(
+            category__name=self.product_to_replace.category)
         # ... check if they are already saved by the user :
         if self.request.user.is_authenticated:
             context['in_fav'] = [
@@ -125,6 +117,7 @@ class CompareView(generic.ListView):
     def get_item(dictionary, key):
         '''
         to find items in a dict in a template filter
+        not used here but kept for learning purpose
         '''
         return dictionary.get(key)
 
@@ -137,6 +130,7 @@ class ProductDetailView(generic.DetailView):
     model = Product
 
     def get_context_data(self, **kwargs):
+        ''' Add hearderImg in context '''
         context = super().get_context_data(**kwargs)
         context['headerImg'] = self.object.image
         return context

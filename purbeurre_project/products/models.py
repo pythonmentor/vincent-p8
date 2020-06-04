@@ -6,8 +6,20 @@ from django.utils.text import slugify
 class ProductManager(models.Manager):
     def similar(self, name):
         return self.filter(
-            models.Q(name__contains=name) | models.Q(category__name__contains=name)
+            models.Q(name__contains=name) |
+            models.Q(category__name__contains=name)
         )
+
+    def better(self, product_to_replace):
+        # Find products from the same category ...
+        products = Product.objects.filter(
+            category__name=product_to_replace.category)
+        # ... differents from product_to_replace ...
+        products = products.exclude(code=product_to_replace.code)
+        # ... have a >= nutritionGrade :
+        return products.filter(
+            nutritionGrade__lte=product_to_replace.nutritionGrade
+            ).order_by('nutritionGrade')
 
 
 class Product(models.Model):
