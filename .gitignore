@@ -1,6 +1,5 @@
 # Specific files #
 ##################
-/purbeurre_project/purbeurre_project/settings.py
 node_modules/
 /purbeurre_project/products/management/commands/categories.json
 
