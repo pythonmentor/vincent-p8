@@ -1,1 +1,1 @@
-web: gunicorn --chdir /purbeurre_project purbeurre_project.wsgi
+web: gunicorn --pythonpath purbeurre_project purbeurre_project.wsgi
