@@ -10,8 +10,8 @@ This project is based on:
 ## Requirements 
 
 Requirements are given in a pdf. The site should look like that:
-![esquisses 1 et 2](/img/esquisses-1-2.jpg)
-![esquisses 3 et 4](/img/esquisses-3-4.jpg)
+![esquisses 1 et 2](/project/img/esquisses-1-2.jpg)
+![esquisses 3 et 4](/project/img/esquisses-3-4.jpg)
 
 ## Theme customization
 

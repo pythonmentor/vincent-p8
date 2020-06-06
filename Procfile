@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath purbeurre_project purbeurre_project.wsgi
+web: gunicorn purbeurre_project.wsgi
