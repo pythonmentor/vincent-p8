@@ -1,7 +1,7 @@
 # Specific files #
 ##################
 node_modules/
-/purbeurre_project/products/management/commands/categories.json
+products/management/commands/categories.json
 */migrations/*
 
 # Visual Studio Code This should ignore the entire #
