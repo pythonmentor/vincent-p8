@@ -22,6 +22,27 @@ class ProductManager(models.Manager):
             ).order_by('nutritionGrade')
 
 
+class Category(models.Model):
+    '''
+    name
+    '''
+    id = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(
+        verbose_name="Category name", max_length=100, unique=True)
+    slug = models.SlugField(
+        max_length=100, unique=True, editable=False, null=True)
+
+    class Meta:
+        verbose_name = "Catégorie"
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)[:50] + '-' + str(self.id)
+        super(Category, self).save(*args, **kwargs)
+
+
 class Product(models.Model):
     '''
     code, name, nutritionGrade, image (url),
@@ -46,7 +67,7 @@ class Product(models.Model):
         "Salt in 100g", max_digits=5, decimal_places=2, default=0)
 
     category = models.ForeignKey(
-        'Category',
+        Category,
         related_name="category",
         on_delete=models.CASCADE,
         null=True,
@@ -62,27 +83,6 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)[:50] + '-' + self.code
         super(Product, self).save(*args, **kwargs)
-
-
-class Category(models.Model):
-    '''
-    name
-    '''
-    id = models.CharField(max_length=100, primary_key=True)
-    name = models.CharField(
-        verbose_name="Category name", max_length=100, unique=True)
-    slug = models.SlugField(
-        max_length=100, unique=True, editable=False, null=True)
-
-    class Meta:
-        verbose_name = "Catégorie"
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)[:50] + '-' + str(self.id)
-        super(Category, self).save(*args, **kwargs)
 
 
 class Favourite(models.Model):

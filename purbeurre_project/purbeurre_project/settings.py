@@ -139,12 +139,10 @@ USE_TZ = True
 
 
 if os.environ.get('ENV') == 'PRODUCTION':
-
     # Static files settings
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
     STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-
     # Extra places for collectstatic to find static files.
     STATICFILES_DIRS = (
         os.path.join(PROJECT_ROOT, 'static'),
@@ -153,6 +151,8 @@ if os.environ.get('ENV') == 'PRODUCTION':
     # https://warehouse.python.org/project/whitenoise/
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+    # Activate Django-Heroku.
+    django_heroku.settings(locals())
 else:
     STATIC_URL = '/templates/static/'
 
@@ -161,9 +161,8 @@ else:
         # '/var/www/static/',
     ]
 
+# import pdb
+# pdb.set_trace()
 # ACCOUNT MANAGEMENT
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/'
-
-# Activate Django-Heroku.
-django_heroku.settings(locals())
