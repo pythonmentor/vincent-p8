@@ -158,7 +158,7 @@ else:
 
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "templates/static"),
-        '/var/www/static/',
+        # '/var/www/static/',
     ]
 
 # ACCOUNT MANAGEMENT
