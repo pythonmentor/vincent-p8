@@ -168,8 +168,6 @@ if os.environ.get('ENV') == 'PRODUCTION':
             },
         },
     }
-    # Activate Django-Heroku.
-    django_heroku.settings(locals())
 else:
     STATIC_URL = '/templates/static/'
 
@@ -183,3 +181,8 @@ else:
 # ACCOUNT MANAGEMENT
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/'
+
+if os.environ.get('ENV') == 'PRODUCTION':
+    # Configure Django App for Heroku.
+    import django_heroku
+    django_heroku.settings(locals())
