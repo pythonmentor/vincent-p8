@@ -15,6 +15,7 @@ requests = "*"
 coverage = "*"
 gunicorn = "*"
 django-heroku = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.8"
