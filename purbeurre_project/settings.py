@@ -90,18 +90,6 @@ WSGI_APPLICATION = 'purbeurre_project.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'purbeurre',
-        'USER': 'vft',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '5432',
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -170,6 +158,16 @@ if os.environ.get('ENV') == 'PRODUCTION':
         },
     }
 else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'purbeurre',
+            'USER': 'vft',
+            'PASSWORD': '',
+            'HOST': '',
+            'PORT': '5432',
+        }
+    }
     STATIC_URL = '/templates/static/'
 
     STATICFILES_DIRS = [
@@ -177,8 +175,7 @@ else:
         # '/var/www/static/',
     ]
 
-# import pdb
-# pdb.set_trace()
+
 # ACCOUNT MANAGEMENT
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/'
