@@ -1,3 +1,1 @@
-web: gunicorn purbeurre_project.wsgi
-python manage.py collectstatic --noinput
-manage.py migrate
+web: gunicorn --chdir /purbeurre_project purbeurre_project.wsgi
