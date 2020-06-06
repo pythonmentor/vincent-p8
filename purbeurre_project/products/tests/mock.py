@@ -1,13 +1,15 @@
-OPENFF_REQUEST = {
+MOCK_CATEGORIES = '{"fr:choco": "Chocolat"}'
+
+MOCK_OPENFF_REQUEST = {
     "page": "1",
     "skip": 0,
     "count": 1,
     "products": [
         {
-            "compared_to_category": "en:unsweetened-beverages",
+            "compared_to_category": "fr:choco",
             "code": "3034470003107",
             "product_name": "Benco original",
-            "nutrition_grade": "e",
+            "nutriscore_grade": "e",
             "selected_images": {
                 "front": {
                     "display": {

@@ -57,7 +57,7 @@ class Product(models.Model):
         ordering = ['category__id']
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)[:50] + '-' + self.code

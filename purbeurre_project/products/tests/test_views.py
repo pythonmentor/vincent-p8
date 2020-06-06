@@ -1,14 +1,14 @@
-from unittest.mock import Mock, patch
-from django.test import TestCase, SimpleTestCase, RequestFactory, Client
+from unittest.mock import patch
+from django.test import TestCase, SimpleTestCase
 from django.urls import reverse, resolve
 from django.contrib.auth.models import User
 from products import views
-from products.models import Product, Category
+from products.models import Product, Category, Favourite
 
 # from .mock import OPENFF_REQUEST
 
 #########################
-#    TEST 404           #
+#    TEST 404
 #########################
 class Test404(SimpleTestCase):
 
@@ -21,7 +21,7 @@ class Test404(SimpleTestCase):
 
 
 #########################
-#  TEST SAVE / DELETE   #
+#  TEST SAVE / DELETE
 #########################
 class TestSaveDelete(TestCase):
 
@@ -46,12 +46,13 @@ class TestSaveDelete(TestCase):
 
     def setUp(self):
         self.client.login(username='user1name', password='user1password')
-        self.factory = RequestFactory()
 
-    def test_save_url_resolves(self):
-        # save url to call with a post
+    def test_save(self):
+        ''' save redirect and actually save Favourite '''
+        # SAVE url to call with a post
         url = reverse('products:save', kwargs={'pk_health': 0, 'pk_unhealth': 1})
         response = self.client.post(url, {}, HTTP_REFERER='http://mytest')
+
         # And get redirected to the same origin page
         self.assertRedirects(
             response,
@@ -60,24 +61,38 @@ class TestSaveDelete(TestCase):
             status_code=302,
             target_status_code=200)
 
-    def test_404_if_not_saved(self):
-        pass
+        self.assertTrue(
+            Favourite.objects.filter(
+                    healthy_product=0,
+                    unhealthy_product=1,
+                    owner=self.user1,
+                    ).exists())
 
-    def test_save_redirection(self):
-        pass
+    def test_delete(self):
+        # First save Favourite
+        self.test_save()
 
-    def test_delete_url_resolves(self):
-        pass
+        # Then DELETE
+        url = reverse('products:delete', kwargs={'pk_health': 0, 'pk_unhealth': 1})
+        response = self.client.post(url, {}, HTTP_REFERER='http://mytest')
 
-    def test_404_if_not_delete(self):
-        pass
+        self.assertRedirects(
+            response,
+            'http://mytest',
+            fetch_redirect_response=False,
+            status_code=302,
+            target_status_code=200)
 
-    def test_delete_redirection(self):
-        pass
+        self.assertFalse(
+            Favourite.objects.filter(
+                    healthy_product=0,
+                    unhealthy_product=1,
+                    owner=self.user1,
+                    ).exists())
 
 
 #########################
-#     TEST SEARCH       #
+#     TEST SEARCH
 #########################
 class TestSearch(TestCase):
 
@@ -91,7 +106,7 @@ class TestSearch(TestCase):
 
 
 #########################
-#    TEST FAVORITES     #
+#    TEST FAVORITES
 #########################
 # test FavouritesView for learning purpose, we keep ORM calls in these tests
 class TestFavouritesView(TestCase):
@@ -135,7 +150,7 @@ class TestFavouritesView(TestCase):
 
 
 #########################
-#    TEST COMPARE       #
+#    TEST COMPARE
 #########################
 class TestCompare(TestCase):
 
@@ -182,7 +197,7 @@ class TestCompare(TestCase):
             data={'code': self.prod1.code})
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)
-        self.assertTrue(response.context['is_paginated'] == True)
+        self.assertTrue(response.context['is_paginated'])
         self.assertTrue(len(response.context['product_list']) == 12)
 
     def test_lists_all_candidates(self):
@@ -195,28 +210,31 @@ class TestCompare(TestCase):
             data={'code': self.prod1.code, 'page': 2})
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)
-        self.assertTrue(response.context['is_paginated'] == True)
+        self.assertTrue(response.context['is_paginated'])
         self.assertTrue(len(response.context['product_list']) == 2)
 
 
 #########################
-#     TEST DETAIL       #
+#     TEST DETAIL
 #########################
 class TestDetail(TestCase):
-    
+
     def test_ProductDetailView2(self):
         mock_category = Category(id="fruits:fr", name="Fruits")
         mock_product = Product(code='5', name='prod5', category=mock_category)
 
-        with patch.object(views.ProductDetailView,'get_object',
+        # Patch genericView to return only one object
+        with patch.object(
+            views.ProductDetailView,
+            'get_object',
             return_value=mock_product):
 
-            url = reverse('products:detail', args=[5])
-            response = self.client.get(url)
-            # Test function used
-            self.assertIs(
-                resolve(url).func.__name__,
-                views.ProductDetailView.as_view().__name__)
-            # Test template used
-            self.assertTemplateUsed(response, 'products/product_detail.html')
-            self.assertContains(response, 'Prod5')
+                url = reverse('products:detail', args=[5])
+                response = self.client.get(url)
+                # Test function used
+                self.assertIs(
+                    resolve(url).func.__name__,
+                    views.ProductDetailView.as_view().__name__)
+                # Test template used
+                self.assertTemplateUsed(response, 'products/product_detail.html')
+                self.assertContains(response, 'Prod5')

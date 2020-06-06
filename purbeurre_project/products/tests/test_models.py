@@ -1,7 +1,7 @@
 from decimal import Decimal
 from django.test import TestCase
 from django.db.utils import IntegrityError
-from products.models import Product
+from products.models import Product, Category
 
 
 class TestProductsModels(TestCase):
@@ -9,7 +9,7 @@ class TestProductsModels(TestCase):
     @classmethod  # <- setUpTestData must be a class method
     def setUpTestData(cls):
         ''' Create product '''
-        Product.objects.create(
+        cls.prod1 = Product.objects.create(
             name="Coco colo",
             code="123456",
             fat=12.34,
@@ -20,6 +20,9 @@ class TestProductsModels(TestCase):
         Product.objects.create(
             name="Cocu colu",
             code="789")
+        cls.cat = Category.objects.create(
+            name="Test Category"
+        )
         # Or we can write : self.product1 = Product.object
         
         cls.prod1 = Product.objects.get(code="123456")
@@ -64,3 +67,7 @@ class TestProductsModels(TestCase):
     def test_code_other_that_int(self):
         with self.assertRaises(ValueError):
             Product.objects.create(name="Cycy coly", code="abcd")
+
+    def test_str(self):
+        self.assertEqual(str(self.prod1), "Coco colo")
+        self.assertEqual(str(self.cat), "Test Category")

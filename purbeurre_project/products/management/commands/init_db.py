@@ -34,6 +34,7 @@ class Command(BaseCommand):
                 products = req_output["products"]
                 # No more than 90 product per category
                 count = 0
+                
 
                 for item in products:
                     # Assign attributes to product

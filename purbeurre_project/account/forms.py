@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 
 
-
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Requis.')
 

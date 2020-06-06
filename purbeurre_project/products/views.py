@@ -4,8 +4,7 @@ from django.urls import reverse
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.template.defaulttags import register
-from .models import Product, Category, Favourite
+from .models import Product, Favourite
 
 
 @login_required
@@ -21,6 +20,8 @@ def save(request, pk_health, pk_unhealth):
         )
         favourite.save()
     except IntegrityError:
+        # integrity of the database is affected :
+        # foreign key check fails, duplicate key, etc.
         pass
     # Redirect to referer or products index if no referer
     return redirect(
@@ -113,13 +114,13 @@ class CompareView(generic.ListView):
             context['in_fav'] = []
         return context
 
-    @register.filter
-    def get_item(dictionary, key):
-        '''
-        to find items in a dict in a template filter
-        not used here but kept for learning purpose
-        '''
-        return dictionary.get(key)
+    # @register.filter
+    # def get_item(dictionary, key):
+    #     '''
+    #     to find items in a dict in a template filter
+    #     not used here but kept for learning purpose
+    #     '''
+    #     return dictionary.get(key)
 
 
 class ProductDetailView(generic.DetailView):
