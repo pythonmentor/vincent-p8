@@ -1,4 +1,5 @@
 import requests
+import os
 from json import load
 from django.core.management.base import BaseCommand
 from products.models import Product, Category
@@ -14,7 +15,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Open json of all categories
-        with open('products/management/commands/categories_cleaned.json', 'r') as json_file:
+        with open(os.path.join(os.path.dirname(__file__), "categories_cleaned.json"), 'r') as json_file:
+        # with open('products/management/commands/categories_cleaned.json', 'r') as json_file:
             categories = load(json_file)
             for category in categories:
                 category_DB, created = Category.objects.update_or_create(
