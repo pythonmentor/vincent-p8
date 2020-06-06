@@ -2,6 +2,7 @@
 ##################
 node_modules/
 /purbeurre_project/products/management/commands/categories.json
+*/migrations/*
 
 # Visual Studio Code This should ignore the entire #
 # .vscode directory, no matter where it is located.# 
