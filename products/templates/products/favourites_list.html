@@ -20,7 +20,7 @@
                         {% if favourite.healthy_product.image %}
                         <img src="{{ favourite.healthy_product.image }}" class="card-img-top product-thumb" alt="">
                         {% else %}
-                        <img src="{% static 'img/product.jpg'%}" alt="" class="card-img-top product-thumb">
+                        <img src="{% static 'assets/img/product.jpg'%}" alt="" class="card-img-top product-thumb">
                         {% endif %}
                         {% if favourite.healthy_product.nutritionGrade %}
                             <span class="grade grade-{{ favourite.healthy_product.nutritionGrade }}"><b>{{ favourite.healthy_product.nutritionGrade|upper }}</b></span>

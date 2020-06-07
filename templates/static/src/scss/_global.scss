@@ -1,0 +1,88 @@
+// Global styling for this template
+body,
+html {
+  width: 100%;
+  height: 100%;
+}
+
+// Typography
+.text-white-75 {
+  color: fade-out($white, .25);
+}
+
+// Custom horizontal rules
+hr.divider {
+  max-width: 3.25rem;
+  border-width: 0.2rem;
+  border-color: $primary;
+}
+
+hr.light {
+  border-color: $white;
+}
+
+// Button restyling
+.btn {
+  font-family: $font-family-sans-serif;
+}
+
+.btn-xl {
+  padding: 1.25rem 2.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 10rem;
+}
+
+// Page section padding
+.page-section {
+  padding: 2rem 0;
+}
+
+.product-thumb {
+  object-fit: none; /* Do not scale the image */
+  object-position: center; /* Center the image within the element */
+  width: 100%;
+  max-height: 200px;
+  min-height: 200px;
+  margin-bottom: 1rem;
+}
+
+.grade{
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  text-align: center;
+  border-radius: 20px;
+  color: white;
+  padding: 5px 15px;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.grade-a{
+  background: #007518;
+}
+.grade-b{
+  background: #94C11E;
+}
+.grade-c{
+  background: #FFDE00;
+}
+.grade-d{
+  background: #F29202;
+}
+.grade-e{
+  background:#DD1D02;
+}
+.dot {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+header.masthead h2 {
+  text-shadow: 0 0 30px #fff, 0 0 10px #ccc;
+}

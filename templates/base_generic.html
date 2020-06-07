@@ -7,18 +7,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
-  <link rel="shortcut icon" href="{% static 'img/favicon.png' %}" type="image/png">
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/png">
   <meta name="author" content="">
   <title>{% block title %}Accueil{% endblock %} - Purbeurre</title>
   {# COMMENT ANY CODE IN TEMPLATES #}
-  <!-- Font Awesome Icons -->
-  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+  <!-- Font Awesome icons (free version)-->
+  <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Scope+One" rel="stylesheet" type="text/css">
   <!-- Plugin CSS -->
   <link href="{% static 'vendor/magnific-popup/magnific-popup.css' %}" rel="stylesheet">
   <!-- Theme CSS - Includes Bootstrap -->
-  <link href="{% static 'css/creative.css' %}" rel="stylesheet">
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
   <style>
     header.masthead {
       padding-top: 10rem;
@@ -37,7 +37,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
     <div class="container">
-      <a class="navbar-brand" href="{% url 'pages:index' %}"><img src="{% static 'img/logo.png' %}" class="logo">
+      <a class="navbar-brand" href="{% url 'pages:index' %}"><img src="{% static 'assets/img/logo.png' %}" class="logo">
         Purbeurre</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -54,12 +54,12 @@
           <li class="nav-item">
             {% if user.is_authenticated %}
               <a class="nav-link" href="{% url 'profile' %}">
-                <img src="{% static 'img/icon_account.png' %}" alt="Compte" title="Mon compte">
+                <img src="{% static 'assets/img/icon_account.png' %}" alt="Compte" title="Mon compte">
                 <span>Mon compte</span>
               </a>
               {% else %}
               <a class="nav-link" href="{% url 'login' %}">
-                <img src="{% static 'img/icon_account.png' %}" alt="Compte" title="S'inscrire">
+                <img src="{% static 'assets/img/icon_account.png' %}" alt="Compte" title="S'inscrire">
                 <span>S'inscrire</span>
               </a>
               {% endif %}
@@ -67,13 +67,13 @@
           {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'products:index' %}">
-              <img src="{% static 'img/icon_food.png' %}" alt="Mes aliments" title="Mes aliments">
+              <img src="{% static 'assets/img/icon_food.png' %}" alt="Mes aliments" title="Mes aliments">
               <span>Mes aliments</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">
-              <img src="{% static 'img/icon_logout.png' %}" alt="Déconnexion" title="Déconnexion">
+              <img src="{% static 'assets/img/icon_logout.png' %}" alt="Déconnexion" title="Déconnexion">
               <span>Déconnexion</span>
             </a>
           </li>
@@ -122,7 +122,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
   
     <!-- Custom scripts for this template -->
-    <script src="{% static 'js/creative.min.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
 
 </body>
 
