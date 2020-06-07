@@ -124,14 +124,7 @@ USE_L10N = True
 USE_TZ = True
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'purbeurre',
-        'USER': 'vft',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '5432',
-    }
+    'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': 'db.sqlite3'}
 }
 
 
