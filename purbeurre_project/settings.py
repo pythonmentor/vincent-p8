@@ -135,6 +135,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
     # Extra places for collectstatic to find static files.
     STATICFILES_DIRS = (
         os.path.join(BASE_DIR, 'templates/static/dist'),
+        os.path.join(BASE_DIR, "static"),
     )
 
     # Simplified static file serving.
@@ -173,6 +174,7 @@ else:
 
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "templates/static/dist/"),
+        os.path.join(BASE_DIR, "static"),
         # '/var/www/static/',
     ]
 
